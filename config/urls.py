@@ -19,4 +19,5 @@ from django.urls import path, include # 아래에 path를 사용하기 위해 im
 urlpatterns = [
     path('blog/', include('blog.urls')), # 블로그에 urls로 가라는 명령
     path('admin/', admin.site.urls),
+    path('',include('single_pages.urls'))
      ]
