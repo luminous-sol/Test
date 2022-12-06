@@ -1,14 +1,12 @@
 
 <!DOCTYPE html>
-{% load static %}
 <html>
 
 <head>
     <title>Blog</title>
-    <link rel="stylesheet" href="{%static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
+    <link href="./bootstrap4/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
-    <!--script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script-->
-    <!--https://fontawesome.com 들어가면 아이콘 그냥 쓸 수 있는 사이트 -->
+    <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -22,7 +20,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="./index.html">Home<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./blog_list.html">Blog</a>
@@ -86,21 +84,21 @@
             <div class="col-md-8 col-lg-9">
                 <h1>Blog</h1>
 
-                {% for p in post_list %} 
                 <!-- Blog Post -->
                 <div class="card mb-4">
                     <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
                     <div class="card-body">
-                        <h2 class="card-title">{{ p.title }}</h2>
-                        <p class="card-text">{{ p.content }}</p>
-                        <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
+                        <h2 class="card-title">Post Title</h2>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
+                            aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi
+                            vero voluptate voluptatibus possimus, veniam magni quis!</p>
+                        <a href="#" class="btn btn-primary">Read More &rarr;</a>
                     </div>
                     <div class="card-footer text-muted">
-                        Posted on {{ p.create_at }} by
-                        <a href="#">작성자명</a>
+                        Posted on January 1, 2017 by
+                        <a href="#">Start Bootstrap</a>
                     </div>
                 </div>
-                {% endfor %}
 
                 <!-- Blog Post -->
                 <div class="card mb-4">
