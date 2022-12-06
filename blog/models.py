@@ -2,7 +2,7 @@ from django.db import models
 
 # 함수를 사용하는 방법과 class 를 사용하는 방법
 
-class Post(models.Model):
+class Post(models.Model): # 클래스 방식
     title = models.CharField(max_length=30)
     content = models.TextField()
     
@@ -14,6 +14,10 @@ class Post(models.Model):
     
     def __str__(self):
         return f'[{self.pk}]{self.title}'
+
+    def get_absolute_url(self):
+        return f'/blog/{self.pk}'
+        
     
     # 오브젝트로 나오던 것을 오브젝트가 아닌 입력한 제목으로 나오게 변경
     
