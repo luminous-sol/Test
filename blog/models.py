@@ -6,6 +6,10 @@ class Post(models.Model): # 클래스 방식
     title = models.CharField(max_length=30)
     content = models.TextField()
     
+    head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d', blank=True)
+    # 이미지를 저장하지 않고 
+    file_upload = models.FileField(upload_to='blog/filess/%Y/%m/%d', blank=True)
+    # 파일 업로드하기
     create_at = models.DateTimeField(auto_now_add=True)
     # 시간이 자동으로 들어감
     updated_at = models.DateTimeField(auto_now=True)
@@ -25,5 +29,5 @@ class Post(models.Model): # 클래스 방식
     # 현재 가입된 것 하나밖에 없으니까 
     # author : 추후 작성 예저
     
-    
+    # models 작업 후에는 꼭 필수적으로 migrate를 해야한다. 
     
