@@ -1,113 +1,65 @@
+{% extends 'blog/base.html' %}
 
-<!DOCTYPE html>
-{% load static %}
-<html>
-
-<head>
-    <title>Blog</title>
-    <link rel="stylesheet" href="{%static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
-
-    <!--script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script-->
-    <!--https://fontawesome.com 들어가면 아이콘 그냥 쓸 수 있는 사이트 -->
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="./index.html">Do It Django</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="./index.html">Home<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./blog_list.html">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./about_me.html">About Me</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown link
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="logInModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel"> <i class="fas fa-sign-in-alt"></i>&nbsp Log In</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-outline-dark btn-block btn-sm "><i class="fab fa-google"></i>&nbsp&nbsp Log in with Google</button>
-                            <button type="button" class="btn btn-outline-dark btn-block btn-sm "><i class="far fa-envelope"></i>&nbsp&nbsp Log in with E-mail</button>
-                        </div>
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-outline-dark btn-block btn-sm"><i class="far fa-envelope"></i>&nbsp&nbsp Sign Up with E-mail</button>
-                        </div>
-                    </div>                
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container my-3">
-        <div class="row">
-            <div class="col-md-8 col-lg-9">
-                <h1>Blog</h1>
-
-                {% for p in post_list %} 
+    {% block main_area %}
+                <h1>Blog {% if category %}
+                        <span class="badge badge-secondary">{{ category }}</span>
+                        {% endif %}
+                    {% if tag %}
+                        <span class="badge badge-secondary">{{ tag }}({{ tag.post_set.count }})</span>
+                    {% endif %}
+                </h1>
+            {% if post_list.exists %}
+                {% for p in post_list %}
                 <!-- Blog Post -->
-                <div class="card mb-4">
-                    {% if p.head_image %}
-                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="Card image cap">
+                <div class="card mb-4" id="post-{{ p.pk }}" >
+                    {% if  p.head_image %}
+                        <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
                     {% else %}
-                        <img src="card-img-top" src="http://picsum.photos/200/300" alt ="random image">
+                        <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
                     {% endif %}
                     <div class="card-body">
+                        
+                        {% if p.category %}
+                            <span class="badge badge-secondary float-right">{{ p.category }}</span>
+                        {% else %}
+                            <span class="badge badge-secondary float-right">미분류</span>
+                        {% endif %}
+                        
                         <h2 class="card-title">{{ p.title }}</h2>
-                        <p class="card-text">{{ p.content }}</p>
+                        {% if p.hook_text %}
+                            <h5 class="text-muted">{{ p.hook_text}}</h5>
+                        {% endif %}
+                        <p class="card-text">{{ p.content | truncatewords:45 }}</p>
+                        
+                        {% if p.tags.exists %}
+                            <i class="fas fa-tags"></i>
+                                {% for tag in p.tags.iterator %}
+                                    <a href="{{ tag.get_absolute_url }}"><span class="badge badge-pill badge-light">
+                                        {{ tag }}</span></a>
+                                {% endfor %}
+                            <br>
+                            <br>
+                        {% endif %}
+                        
+                        
+                        
+                        
                         <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
                     </div>
                     <div class="card-footer text-muted">
                         Posted on {{ p.create_at }} by
-                        <a href="#">작성자명</a>
+                        <a href="#">{{ p.author | upper}}</a>
+                        
                     </div>
+                    <a href="{{ p.category.name }}">{{ p.category.name }}</a>
                 </div>
-                {% endfor %}
-
+                {% endfor%}
+                {% else %}
+                    <h3>아직 게시물이 없습니다</h3>
+                {% endif %}
+                
                 <!-- Blog Post -->
-
+               
 
                 <!-- Pagination -->
                 <ul class="pagination justify-content-center mb-4">
@@ -118,8 +70,9 @@
                         <a class="page-link" href="#">Newer &rarr;</a>
                     </li>
                 </ul>
+    {% endblock %}
 
-            </div>
+            
 
             <div class="col-md-4 col-lg-3">
                 <!-- Search Widget -->
@@ -170,8 +123,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        
+    
 
     <!-- Footer -->
     <footer class="py-5 bg-dark">
@@ -194,6 +147,3 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 
-</body>
-
-</html>
