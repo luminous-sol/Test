@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import os
 
 # 함수를 사용하는 방법과 class 를 사용하는 방법
@@ -39,9 +40,15 @@ class Post(models.Model): # 클래스 방식
     
     create_at = models.DateTimeField(auto_now_add=True)
     # 시간이 자동으로 들어감
+    
     updated_at = models.DateTimeField(auto_now=True)
     # 시간이 자동으로 업데이트 됨
     
+    author = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+    
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+    
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
     
     def __str__(self):
         return f'[{self.pk}]{self.title}'
